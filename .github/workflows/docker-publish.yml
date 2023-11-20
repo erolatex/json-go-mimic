@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - 'VERSION'
+      - 'VERSION'  # Triggers the workflow on changes to the VERSION file only
 
 jobs:
   build-and-push:
@@ -23,9 +23,8 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Read the version
-        id: version
-        run: echo "::set-output name=VERSION::$(cat VERSION)"
+      - name: Read the version and set as env var
+        run: echo "VERSION=$(cat VERSION)" >> $GITHUB_ENV
 
       - name: Build and push
         uses: docker/build-push-action@v2
@@ -35,7 +34,7 @@ jobs:
           push: true
           tags: |
             erolatex/json-go-mimic:latest
-            erolatex/json-go-mimic:${{ steps.version.outputs.VERSION }}
+            erolatex/json-go-mimic:${{ env.VERSION }}
 
       - name: Image digest
         run: echo ${{ steps.build-and-push.outputs.digest }}
