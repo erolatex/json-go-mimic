@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"log"
 	"net/http"
 	"os"
@@ -40,21 +41,27 @@ func main() {
 
 		http.HandleFunc(e.Path, func(w http.ResponseWriter, r *http.Request) {
 			if e.AuthType != "None" {
+				var token string
 				if e.AuthType == "Bearer" {
-					token := strings.TrimPrefix(r.Header.Get("Authorization"), "Bearer ")
-					if token != e.AuthKey {
-						http.Error(w, "Unauthorized", http.StatusUnauthorized)
-						return
+					token = strings.TrimPrefix(r.Header.Get("Authorization"), "Bearer ")
+				} else {
+					token = r.Header.Get(e.AuthType)
+				}
+
+				if token != e.AuthKey {
+					w.Header().Set("Content-Type", "application/json")
+					w.WriteHeader(http.StatusUnauthorized)
+					jsonResponse := `{"error": "Unauthorized"}`
+					if _, err := io.WriteString(w, jsonResponse); err != nil {
+						log.Printf("Error sending unauthorized response for path %s: %v", e.Path, err)
 					}
-				} else if r.Header.Get(e.AuthType) != e.AuthKey {
-					http.Error(w, "Unauthorized", http.StatusUnauthorized)
 					return
 				}
 			}
 
 			w.Header().Set("Content-Type", "application/json")
-			if _, writeErr := w.Write(jsonFile); writeErr != nil {
-				log.Printf("Error writing JSON response for path %s: %v", e.Path, writeErr)
+			if _, err := w.Write(jsonFile); err != nil {
+				log.Printf("Error writing JSON response for path %s: %v", e.Path, err)
 			}
 		})
 	}
