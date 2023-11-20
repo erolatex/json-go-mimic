@@ -1,0 +1,7 @@
+{
+    "message": "Response from the second endpoint",
+    "additional_info": {
+        "type": "example",
+        "valid": true
+    }
+}

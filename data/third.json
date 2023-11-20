@@ -1,0 +1,8 @@
+{
+    "info": "This endpoint is public and requires no authentication.",
+    "status": "success",
+    "data": {
+        "message": "Welcome to the public endpoint!",
+        "timestamp": "2023-11-20T14:08:42Z"
+    }
+}

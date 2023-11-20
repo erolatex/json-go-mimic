@@ -9,7 +9,7 @@ configs/config.json
 _vendor/
 bin/
 pkg/
-data/
+data/*
 
 # IDEs and Editors
 .idea/
