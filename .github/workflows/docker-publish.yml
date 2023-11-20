@@ -26,7 +26,7 @@ jobs:
       - name: Read the version and set as env var
         run: echo "VERSION=$(cat VERSION)" >> $GITHUB_ENV
 
-      - name: Build and push
+      - name: Build and push Docker images
         uses: docker/build-push-action@v2
         with:
           context: .
@@ -35,6 +35,7 @@ jobs:
           tags: |
             erolatex/json-go-mimic:latest
             erolatex/json-go-mimic:${{ env.VERSION }}
+          platforms: linux/amd64,linux/arm64  # This will build images for both x86_64 and ARM architectures
 
       - name: Image digest
         run: echo ${{ steps.build-and-push.outputs.digest }}
