@@ -1,0 +1,23 @@
+{
+    "port": 7732,
+    "endpoints": [
+        {
+            "path": "/endpoint/bearer",
+            "jsonFilePath": "data/first.json",
+            "authType": "Bearer",
+            "authKey": "your_bearer_token_here"
+        },
+        {
+            "path": "/endpoint/apikey",
+            "jsonFilePath": "data/second.json",
+            "authType": "X-Api-Key",
+            "authKey": "your_api_key_here"
+        },
+        {
+            "path": "/public/endpoint",
+            "jsonFilePath": "data/third.json",
+            "authType": "None",
+            "authKey": ""
+        }
+    ]
+}
