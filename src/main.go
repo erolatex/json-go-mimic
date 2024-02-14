@@ -17,6 +17,7 @@ type Config struct {
 		JsonFilePath string `json:"jsonFilePath"`
 		AuthType     string `json:"authType"`
 		AuthKey      string `json:"authKey"`
+		ContentType  string `json:"contentType"`
 	} `json:"endpoints"`
 }
 
@@ -59,7 +60,11 @@ func main() {
 				}
 			}
 
-			w.Header().Set("Content-Type", "application/json")
+			if e.ContentType == "" {
+				w.Header().Set("Content-Type", "application/json")
+			} else {
+				w.Header().Set("Content-Type", e.ContentType)
+			}
 			if _, err := w.Write(jsonFile); err != nil {
 				log.Printf("Error writing JSON response for path %s: %v", e.Path, err)
 			}
